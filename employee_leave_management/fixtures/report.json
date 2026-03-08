@@ -1,0 +1,34 @@
+[
+ {
+  "add_total_row": 0,
+  "add_translate_data": 0,
+  "columns": [],
+  "disabled": 0,
+  "docstatus": 0,
+  "doctype": "Report",
+  "filters": [],
+  "is_standard": "No",
+  "javascript": null,
+  "json": null,
+  "letter_head": null,
+  "modified": "2026-03-08 20:25:22.928103",
+  "module": "Employee Leave Management",
+  "name": "Leave Summary Report",
+  "prepared_report": 0,
+  "query": "SELECT\r\n    COUNT(*) AS \"Total Leaves\",\r\n    SUM(CASE WHEN status = 'Approved' THEN 1 ELSE 0 END) AS \"Approved Leaves\",\r\n    SUM(CASE WHEN status = 'Pending' THEN 1 ELSE 0 END) AS \"Pending Leaves\",\r\n    SUM(CASE WHEN status = 'Cancelled' THEN 1 ELSE 0 END) AS \"Cancelled Leaves\"\r\nFROM `tabLeave Request`;",
+  "ref_doctype": "Leave Request",
+  "reference_report": null,
+  "report_name": "Leave Summary Report",
+  "report_script": "def execute(filters=None):\r\n\r\n    total = frappe.db.count(\"Leave Request\")\r\n    approved = frappe.db.count(\"Leave Request\", {\"status\": \"Approved\"})\r\n    pending = frappe.db.count(\"Leave Request\", {\"status\": \"Pending\"})\r\n    cancelled = frappe.db.count(\"Leave Request\", {\"status\": \"Cancelled\"})\r\n\r\n    columns = [\r\n        {\"label\": \"Total Leaves\", \"fieldname\": \"total\", \"fieldtype\": \"Int\", \"width\": 200},\r\n        {\"label\": \"Approved Leaves\", \"fieldname\": \"approved\", \"fieldtype\": \"Int\", \"width\": 200},\r\n        {\"label\": \"Pending Leaves\", \"fieldname\": \"pending\", \"fieldtype\": \"Int\", \"width\": 200},\r\n        {\"label\": \"Cancelled Leaves\", \"fieldname\": \"cancelled\", \"fieldtype\": \"Int\", \"width\": 200}\r\n    ]\r\n\r\n    data = [{\r\n        \"total\": total,\r\n        \"approved\": approved,\r\n        \"pending\": pending,\r\n        \"cancelled\": cancelled\r\n    }]\r\n\r\n    return columns, data",
+  "report_type": "Query Report",
+  "roles": [
+   {
+    "parent": "Leave Summary Report",
+    "parentfield": "roles",
+    "parenttype": "Report",
+    "role": "System Manager"
+   }
+  ],
+  "timeout": 0
+ }
+]
